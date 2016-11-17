@@ -32,10 +32,13 @@ gem 'jwt'
 gem 'rack-cors', :require => 'rack/cors'
 # Use Rails Admin. Read more: https://github.com/sferik/rails_admin
 gem 'rails_admin', '~> 1.0'
-# file upload solution
+# Use carrierwave for file upload solution
 gem 'carrierwave', '0.10.0'
-# photo resizing
+# Use mini magick photo resizing
 gem 'mini_magick', '4.5.1'
+# use fog for AWS S3
+gem 'fog', '1.23.0'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
