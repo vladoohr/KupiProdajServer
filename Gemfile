@@ -32,8 +32,13 @@ gem 'jwt'
 gem 'rack-cors', :require => 'rack/cors'
 # Use Rails Admin. Read more: https://github.com/sferik/rails_admin
 gem 'rails_admin', '~> 1.0'
+# file upload solution
+gem 'carrierwave', '0.10.0'
+# photo resizing
+gem 'mini_magick', '4.5.1'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

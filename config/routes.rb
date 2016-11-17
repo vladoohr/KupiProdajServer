@@ -17,4 +17,6 @@ Rails.application.routes.draw do
       get '/items/categories', to: 'items#categories' 
   	end
   end
+
+  resources :photos
 end
