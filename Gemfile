@@ -37,7 +37,7 @@ gem 'carrierwave', '0.10.0'
 # Use mini magick photo resizing
 gem 'mini_magick', '4.5.1'
 # use fog for AWS S3
-gem 'fog', '1.23.0'
+gem 'fog', '~> 1.36.0'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
