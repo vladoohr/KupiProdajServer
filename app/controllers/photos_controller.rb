@@ -5,6 +5,7 @@ class PhotosController < ApplicationController
 	end
 
 	def create
+		binding.pry
 		@photo = Photo.new(photo_params)
 
 		@photo.save

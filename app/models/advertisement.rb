@@ -14,4 +14,6 @@ class Advertisement < ApplicationRecord
 
 	validates :price, numericality: {message: "Цената може да содржи само бројки!"},
 										allow_nil: true
+
+	mount_base64_uploader :image, ImageUploader
 end

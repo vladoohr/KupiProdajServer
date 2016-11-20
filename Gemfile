@@ -34,10 +34,13 @@ gem 'rack-cors', :require => 'rack/cors'
 gem 'rails_admin', '~> 1.0'
 # Use carrierwave for file upload solution
 gem 'carrierwave', '0.10.0'
+# Upload files encoded as base64 to carrierwave.
+gem 'carrierwave-base64', '~> 2.3.2'
 # Use mini magick photo resizing
 gem 'mini_magick', '4.5.1'
 # use fog for AWS S3
 gem 'fog', '~> 1.36.0'
+
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -55,6 +58,8 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  # Pry is a powerful alternative to the standard IRB shell for Ruby
+  gem 'pry'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
