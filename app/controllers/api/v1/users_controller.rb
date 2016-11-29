@@ -34,6 +34,31 @@ class Api::V1::UsersController < ApplicationController
 		end
 	end
 
+	def user_ads
+		@user = User.find(params[:id])
+		@user_ads = Array.new
+		limit = 3
+		offset = params[:page].to_i - 1
+
+		@user.advertisements.order(updated_at: :desc).limit(limit).offset(offset * limit).each do |ad|
+			@user_ads.push({
+				id: ad.id,
+				title: ad.title,
+				description: ad.description,
+				price: ad.price,
+				city: ad.city.name,
+				category: ad.category.name,
+				image: ad.image.url,
+				updated_at: ad.updated_at.strftime("%d-%m-%Y %H:%M")
+			})
+		end
+
+		render json:{ 
+			user_ads_per_page: @user_ads,
+			user_ads: @user.advertisements
+		} , status: :ok
+	end
+
 	private 
 	def user_params
 		params.require(:user).permit(:full_name, :phone, :email)
@@ -46,4 +71,4 @@ class Api::V1::UsersController < ApplicationController
       user: { id: user.id, full_name: user.full_name, email: user.email, phone: user.phone }
     }
   end
-en
+end

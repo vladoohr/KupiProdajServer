@@ -1,5 +1,32 @@
 class Api::V1::AdvertisementsController < ApplicationController
 	skip_before_action :verify_authenticity_token, only: [:new]
+	before_action :find_advertisement, only: [:show, :update]
+
+	def index
+		@advertisements = Advertisement.all
+		ads = Array.new
+		limit = 3
+		offset = params[:page].to_i - 1
+
+		@advertisements.order(updated_at: :desc).limit(limit).offset(offset * limit).each do |ad|
+			ads.push({
+				id: ad.id,
+				title: ad.title,
+				description: ad.description,
+				price: ad.price,
+				city: ad.city.name,
+				category: ad.category.name,
+				image: ad.image.url,
+				updated_at: ad.updated_at.strftime("%d-%m-%Y %H:%M")
+			})
+		end
+
+		render json:{ 
+			ads: @advertisements,
+			ads_per_page: ads
+		} , status: :ok
+
+	end
 
 	def new
 		@ad = Advertisement.new(ad_params)
@@ -18,52 +45,62 @@ class Api::V1::AdvertisementsController < ApplicationController
 
 			render json: {errors: @errors}, status: :bad_content
 		end
-
-	# ensure
-	# 	clean_tempfile
 	end
 
 	def show
-		@ad = Advertisement.find(params[:id])
+		@user =  @ad.user
 
-		render json: @ad
+		render json: {
+			load_ad: {
+				title: @ad.title,
+				description: @ad.description,
+				price: @ad.price,
+				purpose: @ad.purpose,
+				state: @ad.state,
+				category: @ad.category_id,
+				location: @ad.city_id,
+				image: @ad.image.url 			
+			},
+			ad: {
+				id: @ad.id,
+				title: @ad.title,
+				description: @ad.description,
+				price: @ad.price,
+				city: @ad.city.name,
+				category: @ad.category.name,
+				image: @ad.image.url,
+				updated_at: @ad.updated_at.strftime("%d-%m-%Y %H:%M")
+			},
+			user: {
+				id: @user.id,
+				full_name: @user.full_name,
+				phone: @user.phone,
+				email: @user.email
+			}
+		}, status: :ok
+	end
+
+	def update
+		if @ad.update(ad_params)
+			render json: {message: "Успешно додаден оглас!"}, status: :ok
+		else
+			# pass only error messages
+			@errors = Array.new
+			@ad.errors.each do |attribute, error|
+				@errors.push(error)
+			end
+
+			render json: {errors: @errors}, status: :bad_content
+		end
 	end
 
 	private
-	def ad_params
-		the_params = params.require(:advertisement).permit(:title, :description, :price, :purpose, :state, :image)
-		# the_params[:image] = parse_image_data(the_params[:image]) if the_params[:image]
-    # the_params
-	end
 
-	def parse_image_data(base64_image)
-    filename = "upload-image"
-    in_content_type, encoding, string = base64_image.split(/[:;,]/)[1..3]
+		def ad_params
+			params.require(:advertisement).permit(:title, :description, :price, :purpose, :state, :image)
+		end
 
-    @tempfile = Tempfile.new(filename)
-    @tempfile.binmode
-    @tempfile.write Base64.decode64(string)
-    @tempfile.rewind
-
-    # for security we want the actual content type, not just what was passed in
-    content_type = `file --mime -b #{@tempfile.path}`.split(";")[0]
-
-    # we will also add the extension ourselves based on the above
-    # if it's not gif/jpeg/png, it will fail the validation in the upload model
-    extension = content_type.match(/gif|jpeg|png/).to_s
-    filename += ".#{extension}" if extension
-
-    ActionDispatch::Http::UploadedFile.new({
-      tempfile: @tempfile,
-      content_type: content_type,
-      filename: filename
-    })
-  end
-
-  def clean_tempfile
-    if @tempfile
-      @tempfile.close
-      @tempfile.unlink
-    end
-  end
+		def find_advertisement
+			@ad = Advertisement.find(params[:id])		
+		end
 end
