@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
 	def index
-		redirect_to "http://localhost:8080/"
+		redirect_to "https://advertisementsclient.herokuapp.com/?page=1"
 	end
 end

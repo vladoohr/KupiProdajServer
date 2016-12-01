@@ -17,12 +17,12 @@ class User < ApplicationRecord
   									numericality: { message: 'Телефонскиот број може да содржи само бројки 0-9 и + на почетокот' }
 
 	has_secure_password
-	validates :password, presence: { message: 'Лозинка е задолжително поле' },
-											 length: { minimum: 6, message: 'Лозинка мора да има минимум 6 карактери' }
-	validates :password_confirmation, presence: { message: 'Потврди лозинка е задолжително поле' },
-											 							length: { minimum: 6, message: 'Потврди лозинка мора да има минимум 6 карактери' }
+	validates :password, presence: { on: :create,  message: 'Лозинка е задолжително поле' },
+											 length: { minimum: 6, message: 'Лозинка мора да има минимум 6 карактери', allow_blank: true }
+	validates :password_confirmation, presence: { on: :create, message: 'Потврди лозинка е задолжително поле' },
+											 							length: { minimum: 6, message: 'Потврди лозинка мора да има минимум 6 карактери', allow_blank: true }
 
-  validate :confirm_password					 							
+  validate :confirm_password		 							
 
   private
  	def confirm_password
