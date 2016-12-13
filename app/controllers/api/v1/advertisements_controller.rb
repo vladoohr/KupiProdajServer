@@ -3,12 +3,13 @@ class Api::V1::AdvertisementsController < ApplicationController
 	before_action :find_advertisement, only: [:show, :update]
 
 	def index
-		@advertisements = Advertisement.all
-		ads = Array.new
 		limit = 3
+		ads = Array.new
 		offset = params[:page].to_i - 1
 
-		@advertisements.order(updated_at: :desc).limit(limit).offset(offset * limit).each do |ad|
+		@advertisements = Advertisement.search(params[:search], params[:category]).order(updated_at: :desc)
+
+		@advertisements.limit(limit).offset(offset * limit).each do |ad|
 			ads.push({
 				id: ad.id,
 				title: ad.title,
@@ -21,7 +22,7 @@ class Api::V1::AdvertisementsController < ApplicationController
 			})
 		end
 
-		render json:{ 
+		render json:{
 			ads: @advertisements,
 			ads_per_page: ads
 		} , status: :ok
