@@ -38,9 +38,14 @@ gem 'carrierwave', '0.10.0'
 gem 'carrierwave-base64', '~> 2.3.2'
 # Use mini magick photo resizing
 gem 'mini_magick', '4.5.1'
-# use fog for AWS S3
+# Use fog for AWS S3
 gem 'fog', '~> 1.36.0'
-
+# Use sidekiq for background processing
+gem 'sidekiq'
+# Use sinatra from source baceuse of dependency issues
+gem 'sinatra', github: 'sinatra/sinatra'
+# Whenever gem for cron job
+gem 'whenever', require: false
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
