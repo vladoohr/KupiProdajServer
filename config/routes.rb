@@ -15,9 +15,10 @@ Rails.application.routes.draw do
       
       post '/advertisements/new', to: 'advertisements#new'
       post '/advertisements/:id/update', to: 'advertisements#update'
-      post '/advertisements/:id/delete', to: 'advertisements#delete'
+      delete '/advertisements/:id', to: 'advertisements#destroy'
       get  '/advertisements/:id', to: 'advertisements#show'
       get  '/advertisements', to: 'advertisements#index'
+      get '/advertisement/featured', to: 'advertisements#featured'
 
       get '/items/cities', to: 'items#cities' 
       get '/items/categories', to: 'items#categories' 

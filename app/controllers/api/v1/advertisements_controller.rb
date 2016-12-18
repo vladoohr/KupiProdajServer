@@ -1,6 +1,6 @@
 class Api::V1::AdvertisementsController < ApplicationController
 	skip_before_action :verify_authenticity_token, only: [:new]
-	before_action :find_advertisement, only: [:show, :update]
+	before_action :find_advertisement, only: [:show, :update, :destroy]
 
 	def index
 		limit = 3
@@ -70,6 +70,7 @@ class Api::V1::AdvertisementsController < ApplicationController
 				city: @ad.city.name,
 				category: @ad.category.name,
 				image: @ad.image.url,
+				user_id: @ad.user_id,
 				updated_at: @ad.updated_at.strftime("%d-%m-%Y %H:%M")
 			},
 			user: {
@@ -93,6 +94,25 @@ class Api::V1::AdvertisementsController < ApplicationController
 
 			render json: {errors: @errors}, status: :bad_content
 		end
+	end
+
+	def destroy
+		@ad.destroy
+
+		render json: {}, status: :no_content
+	end
+
+	def featured
+		featured = Advertisement.find_by(featured: true)
+
+		render json: {
+			featured: {
+				id: featured.id,
+				image: featured.image.url,
+				title: featured.title,
+				price: featured.price
+			}
+		}, status: :ok
 	end
 
 	private

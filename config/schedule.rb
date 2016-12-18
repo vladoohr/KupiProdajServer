@@ -17,4 +17,6 @@
 #   runner "AnotherModel.prune_old_records"
 # end
 
-# Learn more: http://github.com/javan/whenever
+every 5.minutes do
+  rake "set_featured_ad", :environment => :development
+end

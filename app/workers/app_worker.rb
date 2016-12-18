@@ -5,12 +5,12 @@ class AppWorker
   def perform
 		puts "SIDEKIQ WORKER STARTS"
 
-	  ummark_featured_post
+	  ummark_featured_ad
 
-		mark_featured_post
+		mark_featured_ad
   end
 
-  def ummark_featured_post
+  def ummark_featured_ad
   	featured_ad = Advertisement.find_by(:featured => true)
     if (featured_ad)
     	featured_ad.featured = false
@@ -18,7 +18,7 @@ class AppWorker
     end
   end
 
-  def mark_featured_post
+  def mark_featured_ad
   	ads = Advertisement.all
   	all_ads = ads.count
   	index = rand(all_ads)
