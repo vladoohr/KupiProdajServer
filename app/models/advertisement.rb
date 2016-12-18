@@ -20,11 +20,11 @@ class Advertisement < ApplicationRecord
 	validate :image_size_validation
 
 	def self.search(search, category)
-		if category != "1" and search != ""
+		if category != "0" and search != ""
 			where("category_id = ? AND lower(title) LIKE ?", "#{category}", "%#{search.downcase}%")
 		elsif search != ""
 			where("lower(title) LIKE ?", "%#{search.downcase}%")
-		elsif category != "1"
+		elsif category != "0"
 			where("category_id = #{category}")
   	else
   		all				
