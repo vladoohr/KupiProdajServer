@@ -105,14 +105,18 @@ class Api::V1::AdvertisementsController < ApplicationController
 	def featured
 		featured = Advertisement.find_by(featured: true)
 
-		render json: {
-			featured: {
-				id: featured.id,
-				image: featured.image.url,
-				title: featured.title,
-				price: featured.price
-			}
-		}, status: :ok
+		if featured
+			render json: {
+				featured: {
+					id: featured.id,
+					image: featured.image.url,
+					title: featured.title,
+					price: featured.price
+				}
+			}, status: :ok
+		else
+			render json: {}, status: :no_content
+		end
 	end
 
 	private

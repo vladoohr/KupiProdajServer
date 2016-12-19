@@ -10,6 +10,9 @@ class Api::V1::UsersController < ApplicationController
 
 		if @user.save
 			render json: payload(@user), status: :ok
+
+			# Tell the UserMailer to send a welcome email after save
+			UserMailer.welcome_email(@user).deliver_now
 		else 
 			# pass only error messages
 			@errors = Array.new

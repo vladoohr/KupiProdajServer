@@ -46,6 +46,8 @@ gem 'sidekiq'
 gem 'sinatra', github: 'sinatra/sinatra'
 # Whenever gem for cron job
 gem 'whenever', require: false
+# Simple, Heroku-friendly Rails app configuration using ENV and a single YAML file
+gem "figaro"
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
