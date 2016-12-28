@@ -21,9 +21,12 @@ Rails.application.routes.draw do
       get '/advertisement/featured', to: 'advertisements#featured'
 
       get '/items/cities', to: 'items#cities' 
-      get '/items/categories', to: 'items#categories' 
+      get '/items/categories', to: 'items#categories'
+
+      delete '/photos/:id', to: 'photos#destroy'
   	end
   end
 
+  # For experimentation
   resources :photos
 end

@@ -44,6 +44,11 @@ class Api::V1::UsersController < ApplicationController
 		offset = params[:page].to_i - 1
 
 		@user.advertisements.order(updated_at: :desc).limit(limit).offset(offset * limit).each do |ad|
+			images = Array.new
+			ad.photos.each do |photo|
+				images.push({id: photo.id, url: photo.image.url})
+			end
+
 			@user_ads.push({
 				id: ad.id,
 				title: ad.title,
@@ -51,7 +56,7 @@ class Api::V1::UsersController < ApplicationController
 				price: ad.price,
 				city: ad.city.name,
 				category: ad.category.name,
-				image: ad.image.url,
+				images: images,
 				updated_at: ad.updated_at.strftime("%d-%m-%Y %H:%M")
 			})
 		end

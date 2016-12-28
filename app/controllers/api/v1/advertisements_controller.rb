@@ -10,6 +10,11 @@ class Api::V1::AdvertisementsController < ApplicationController
 		@advertisements = Advertisement.search(params[:search], params[:category]).order(updated_at: :desc)
 
 		@advertisements.limit(limit).offset(offset * limit).each do |ad|
+			images = Array.new
+			ad.photos.each do |photo|
+				images.push({id: photo.id, url: photo.image.url})
+			end
+
 			ads.push({
 				id: ad.id,
 				title: ad.title,
@@ -17,7 +22,7 @@ class Api::V1::AdvertisementsController < ApplicationController
 				price: ad.price,
 				city: ad.city.name,
 				category: ad.category.name,
-				image: ad.image.url,
+				images: images,
 				updated_at: ad.updated_at.strftime("%d-%m-%Y %H:%M")
 			})
 		end
@@ -36,6 +41,9 @@ class Api::V1::AdvertisementsController < ApplicationController
 		@ad.category_id = params[:category]
 
 		if @ad.save
+			params[:images].each do |image|
+				@ad.photos.create(:image => image)
+			end
 			render json: {message: "Успешно додаден оглас!"}, status: :ok
 		else
 			# pass only error messages
@@ -51,6 +59,11 @@ class Api::V1::AdvertisementsController < ApplicationController
 	def show
 		@user =  @ad.user
 
+		images = Array.new
+		@ad.photos.each do |photo|
+			images.push({id: photo.id, url: photo.image.url})
+		end
+
 		render json: {
 			load_ad: {
 				title: @ad.title,
@@ -60,7 +73,7 @@ class Api::V1::AdvertisementsController < ApplicationController
 				state: @ad.state,
 				category: @ad.category_id,
 				location: @ad.city_id,
-				image: @ad.image.url 			
+				images: images 			
 			},
 			ad: {
 				id: @ad.id,
@@ -69,7 +82,7 @@ class Api::V1::AdvertisementsController < ApplicationController
 				price: @ad.price,
 				city: @ad.city.name,
 				category: @ad.category.name,
-				image: @ad.image.url,
+				images: images,
 				user_id: @ad.user_id,
 				updated_at: @ad.updated_at.strftime("%d-%m-%Y %H:%M")
 			},
@@ -106,10 +119,12 @@ class Api::V1::AdvertisementsController < ApplicationController
 		featured = Advertisement.find_by(featured: true)
 
 		if featured
+			image = featured.photos[0] ? featured.photos[0].image.url : nil
+
 			render json: {
 				featured: {
 					id: featured.id,
-					image: featured.image.url,
+					image: image,
 					title: featured.title,
 					price: featured.price
 				}
@@ -122,7 +137,7 @@ class Api::V1::AdvertisementsController < ApplicationController
 	private
 
 		def ad_params
-			params.require(:advertisement).permit(:title, :description, :price, :purpose, :state, :image)
+			params.require(:advertisement).permit(:title, :description, :price, :purpose, :state)
 		end
 
 		def find_advertisement
