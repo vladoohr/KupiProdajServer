@@ -1,25 +1,29 @@
-# README
+# KupiProdaj
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Interested in learning [Rails](http://rubyonrails.org/)?
 
-Things you may want to cover:
+####Familiar with Git?#####
+Checkout this repo, install gems, setup database:
 
-* Ruby version
+```
+	> git clone https://github.com/vladoohr/KupiProdajServer.git
+	> cd KupiProdajServer
+	> bundle install
+	> rake db:migrate
+	> rails s
+```
 
-* System dependencies
+####Not Familiar with Git?#####
+Click download the .zip file.  Extract the contents of the zip file, then open your terminal, change to the project directory, and:
 
-* Configuration
+```
+	> bundle install
+	> rake db:migrate
+	> rails s
+```
 
-* Database creation
+####Set cron job for worker#####
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-# KupiProdajServer
+```
+	> whenever --update-cron
+```
