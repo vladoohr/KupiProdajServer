@@ -15,10 +15,6 @@ class Advertisement < ApplicationRecord
 	validates :price, numericality: {message: "Цената може да содржи само бројки!"},
 										allow_nil: true
 
-	mount_base64_uploader :image, ImageUploader
-
-	validate :image_size_validation
-
 	def self.search(search, category)
 		if category != "0" and search != ""
 			where("category_id = ? AND lower(title) LIKE ?", "#{category}", "%#{search.downcase}%")
@@ -30,9 +26,4 @@ class Advertisement < ApplicationRecord
   		all				
 		end
 	end
-
-	private
-	  def image_size_validation
-	    errors[:image] << "Сликата треба да биде помала од 3000KB" if image.size > 3.megabytes
-	  end
 end
